@@ -3,7 +3,12 @@
 
 Player::Player() :Object("Player"), _texture(0xF0A09_icon, 64)		//Playerタグ付けて、textureを入れる
 {
-	
+	_collision = new CollisionCircle(_position, PLAYER_SIZE);
+}
+
+Player::~Player()
+{
+	delete _collision;
 }
 
 void Player::MoveUp()
@@ -72,6 +77,7 @@ void Player::Update()
 	_velocity.x = PlayerAcceration(_velocityGoal.x, _velocity.x);
 	_velocity.y = PlayerAcceration(_velocityGoal.y, _velocity.y);
 	_position += _velocity;
+	_collision->SetPos(GetPosition());
 }
 
 void Player::Draw() const
@@ -81,5 +87,6 @@ void Player::Draw() const
 
 bool Player::IsDiscard() const
 {
+	if (_hp < 0)return true;
 	return false;
 }

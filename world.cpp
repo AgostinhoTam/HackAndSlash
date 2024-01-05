@@ -31,6 +31,10 @@ void World::Update()
 	for (auto p : _objects) {
 		p->Update();
 	}
+	auto pPlayer = GetObjectByTag("Player");
+	if (GetOverlapObject(pPlayer->GetCollision())) {
+		
+	}
 }
 
 void World::Draw()
@@ -45,6 +49,19 @@ Object* World::GetObjectByTag(const std::string& tag)
 		if (object->GetTag() == tag) { return object; }
 	}
 	//std::find(_objects.begin(), _objects.end(), tag);
+	return nullptr;
+}
+Object* World::GetOverlapObject(const Collision* collision)
+{
+	for (auto object : _objects) {
+		auto dist_collision = object->GetCollision();
+		if (dist_collision == collision)continue;
+		if (dist_collision) {
+			if (dist_collision->IsOverlapping(collision)) {
+				return object;
+			}
+		}
+	}
 	return nullptr;
 }
 //ClearUpの中身は正直普通にdrawの後に入れていいらしい

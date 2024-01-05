@@ -5,6 +5,7 @@ class Enemy :public Object
 private:
 	Texture _texture;					//テキスチャーアセット作った方がいい
 	int _hp=3;
+	const float ENEMY_SIZE = 32.0f;
 public:
 	Enemy();
 	~Enemy()override;

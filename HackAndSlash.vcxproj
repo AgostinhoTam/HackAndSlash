@@ -116,6 +116,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="attack.cpp" />
+    <ClCompile Include="collision.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="enemyspawner.cpp" />
     <ClCompile Include="game.cpp" />
@@ -322,6 +323,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="attack.h" />
+    <ClInclude Include="collision.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="enemyspawner.h" />
     <ClInclude Include="game.h" />

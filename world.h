@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <list>
 #include "object.h"
+#include "collision.h"
 class Object;
 class World {
 private:
@@ -15,4 +16,5 @@ public:
 	void Draw();
 
 	Object* GetObjectByTag(const std::string& tag);
+	Object* GetOverlapObject(const Collision* collision);
 };

@@ -3,11 +3,13 @@
 #include "world.h"
 Enemy::Enemy() :Object("Enemy"), _texture(0xF089A_icon, 64)
 {
+	_collision = new CollisionCircle(_position, ENEMY_SIZE);
 }
 
 Enemy::~Enemy()
 {
 	//ここがポイントになる
+	delete _collision;
 }
 
 void Enemy::Update()
@@ -17,6 +19,7 @@ void Enemy::Update()
 	auto v = player->GetPosition() - GetPosition();
 	v.normalize();
 	SetPosition(GetPosition() + v * 1.5f);
+	_collision->SetPos(GetPosition());
 }
 
 void Enemy::Draw() const
