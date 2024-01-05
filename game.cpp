@@ -3,6 +3,7 @@
 #include "enemyspawner.h"
 Game::Game():_player(new Player)
 {
+
 	_world = new World;
 	_player->SetPosition(Scene::Center());
 	_world->Accept(_player);

@@ -4,13 +4,13 @@ class World;			//お互い参照してる、巡回参照になるから前方宣
 class Object {
 private:
 	World* _world = nullptr;
+	std::string _tag;
+protected:
+	World* GetWorld()const { return _world; }		//
 	Float2 _position = { 0.0f,0.0f };
 	Float2 _forward = { 1.0f,0.0f };
 	Float2 _direction = { 0.0f,0.0f };
 	Float2 _velocity = { 0.0f,0.0f };
-	std::string _tag;
-protected:
-	World* GetWorld()const { return _world; }		//
 public:
 	Object() = default;
 	Object(const std::string& tag):_tag(tag){}

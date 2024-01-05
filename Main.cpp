@@ -4,13 +4,17 @@ void Main()
 {
 	// 背景の色を設定する | Set the background color
 	Scene::SetBackground(ColorF{ 0.6, 0.8, 0.7 });
-
+	int FPS = 60;
+	Stopwatch sw;
+	sw.start();
 	Game game;
-
+	
 
 	while (System::Update())
 	{
 		game.Update();
+		while (sw.msF() < 1000.0f / FPS);
+		sw.restart();
 	}
 }
 
