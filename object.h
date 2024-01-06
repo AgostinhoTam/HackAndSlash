@@ -5,6 +5,7 @@ Date:2024/1/6
 ====================================================================================*/
 #pragma once
 #include "collision.h"
+#include "world.h"
 class World;			//お互い参照してる、巡回参照になるから前方宣言する
 class Attack;
 class Object {
@@ -14,7 +15,6 @@ private:
 protected:
 	World* GetWorld()const { return _world; }		
 	Collision* _collision;
-	Attack* _attack;
 	Float2 _position = { 0.0f,0.0f };
 	Float2 _forward = { 1.0f,0.0f };
 	Float2 _direction = { 0.0f,0.0f };
@@ -29,9 +29,9 @@ public:
 	const Float2& GetPosition()const { return _position; }
 	void SetPosition(const Float2& position) { _position = position; }
 	auto GetCollision()const { return _collision; }
-	Attack* GetAttack()const { return _attack; }
 
-	virtual void Damage(Attack* attack) {};
+
+	virtual void Damage(Attack*) {};
 	virtual void Update() = 0;
 	virtual void Draw()const = 0;
 	virtual bool IsDiscard()const = 0;

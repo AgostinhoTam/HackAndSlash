@@ -5,7 +5,8 @@ Date:2024/1/6
 ====================================================================================*/
 #include "stdafx.h"
 #include "world.h"
-
+#include "attack.h"
+#include "enemy.h"
 World::~World()
 {
 	for (auto p : _objects) {
@@ -25,6 +26,7 @@ void World::CleanUp()
 	_objects.remove_if([](const Object* p) {
 		if (p->IsDiscard()) {
 			delete p;
+			p = nullptr;
 			return true;
 		}
 		return false;
@@ -36,10 +38,14 @@ void World::Update()
 	for (auto p : _objects) {
 		p->Update();
 	}
-	auto pPlayer = GetObjectByTag("Player");
-	if (auto obj = GetOverlapObject(pPlayer->GetCollision())) {
-		if (obj->GetTag() == "Enemy") {
-			obj->Damage(pPlayer->GetAttack());
+	auto attacker = GetObjectByTag("Attack");
+	if(attacker != nullptr){
+		if (auto obj = GetOverlapObject(attacker->GetCollision())) {
+			if (obj->GetTag() == "Enemy") {
+				Attack* pattacker = dynamic_cast<Attack*>(attacker);
+				Enemy* penemy = dynamic_cast<Enemy*>(obj);
+				if(penemy)obj->Damage(pattacker);
+			}
 		}
 	}
 }
@@ -62,7 +68,7 @@ Object* World::GetOverlapObject(const Collision* collision)
 {
 	for (auto object : _objects) {
 		auto dist_collision = object->GetCollision();
-		if (dist_collision == collision)continue;
+		if (object->GetTag() == "Player" || dist_collision == collision)continue;
 		if (dist_collision) {
 			if (dist_collision->IsOverlapping(collision)) {
 				return object;

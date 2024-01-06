@@ -7,6 +7,8 @@ Date:2024/1/6
 #include "object.h"
 class Attack :public Object
 {
+private:
+	Texture _texture;
 public:
 	Attack(Float2 pos);
 	virtual int GetValue()const { return 1; }

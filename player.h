@@ -23,6 +23,5 @@ public:
 	void Update()override;				//Updateの中にアタッククラス入れる
 	void Draw()const override;
 	bool IsDiscard()const override;
-	void AttackKeyPressed();
-	void CreateAttack();
+
 };

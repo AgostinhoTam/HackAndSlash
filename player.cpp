@@ -29,15 +29,19 @@ void Player::PlayerMove()
 {
 	if (KeyW.pressed()) {
 		_velocityGoal.y = -PLAYER_MAX_MOVESPEED;
+		_direction = { 0.0f,-1.0f };
 	}
 	if (KeyA.pressed()) {
 		_velocityGoal.x = -PLAYER_MAX_MOVESPEED;
+		_direction = { -1.0f,0.0f };
 	}
 	if (KeyS.pressed()) {
 		_velocityGoal.y = PLAYER_MAX_MOVESPEED;
+		_direction = { 0.0f,1.0f };
 	}
 	if (KeyD.pressed()) {
 		_velocityGoal.x = PLAYER_MAX_MOVESPEED;
+		_direction = { 1.0f,0.0f };
 	}
 	if (KeyW.up()) {
 		_velocityGoal.y = 0;
@@ -59,8 +63,9 @@ void Player::Update()
 	_velocity.y = PlayerAcceration(_velocityGoal.y, _velocity.y);
 	_position += _velocity;
 	_collision->SetPos(GetPosition());
-	if (KeyZ.pressed()) {
-
+	if (MouseL.up()) {
+		auto attacker = new Attack(GetPosition()+_direction*32);
+		GetWorld()->Accept(attacker);
 	}
 }
 
@@ -75,15 +80,4 @@ bool Player::IsDiscard() const
 	return false;
 }
 
-void Player::AttackKeyPressed()
-{
-	if (KeyZ.pressed()) {
-		
-	}
-}
 
-void Player::CreateAttack()
-{
-	_attack = new Attack(GetPosition());
-	
-}
