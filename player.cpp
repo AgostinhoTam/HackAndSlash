@@ -1,4 +1,9 @@
-﻿#include "stdafx.h"
+﻿/*===================================================================================
+プレイヤー行動（player.cpp)
+Date:2024/1/6
+制作者：譚偉進
+====================================================================================*/
+#include "stdafx.h"
 #include "player.h"
 
 Player::Player() :Object("Player"), _texture(0xF0A09_icon, 64)		//Playerタグ付けて、textureを入れる
@@ -9,30 +14,6 @@ Player::Player() :Object("Player"), _texture(0xF0A09_icon, 64)		//Playerタグ�
 Player::~Player()
 {
 	delete _collision;
-}
-
-void Player::MoveUp()
-{
-
-	SetPosition(GetPosition() + Float2{ 0.0f,-3.0f });
-}
-
-void Player::MoveDown()
-{
-
-	SetPosition(GetPosition() + Float2{ 0.0f,3.0f });
-}
-
-void Player::MoveLeft()
-{
-
-	SetPosition(GetPosition() + Float2{ -3.0f,0.0f });
-}
-
-void Player::MoveRight()
-{
-	
-	SetPosition(GetPosition() + Float2{ 3.0f,0.0f });
 }
 
 float Player::PlayerAcceration(float goal, float cur)
@@ -78,6 +59,9 @@ void Player::Update()
 	_velocity.y = PlayerAcceration(_velocityGoal.y, _velocity.y);
 	_position += _velocity;
 	_collision->SetPos(GetPosition());
+	if (KeyZ.pressed()) {
+
+	}
 }
 
 void Player::Draw() const
@@ -89,4 +73,17 @@ bool Player::IsDiscard() const
 {
 	if (_hp < 0)return true;
 	return false;
+}
+
+void Player::AttackKeyPressed()
+{
+	if (KeyZ.pressed()) {
+		
+	}
+}
+
+void Player::CreateAttack()
+{
+	_attack = new Attack(GetPosition());
+	
 }

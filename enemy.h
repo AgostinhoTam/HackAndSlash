@@ -1,5 +1,11 @@
-﻿#pragma once
+﻿/*===================================================================================
+敵行動（enemy.h)
+Date:2024/1/6
+制作者：譚偉進
+====================================================================================*/
+#pragma once
 #include "object.h"
+#include "attack.h"
 class Enemy :public Object
 {
 private:
@@ -12,6 +18,6 @@ public:
 	void Update()override;				//Updateの中にアタッククラス入れる
 	void Draw()const override;
 	bool IsDiscard()const override;
-
+	void Damage(Attack* attack)override;
 };
 

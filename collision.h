@@ -1,8 +1,14 @@
-﻿#pragma once
+﻿/*===================================================================================
+当たり判定（collision.h)
+Date:2024/1/6
+制作者：譚偉進
+====================================================================================*/
+#pragma once
 class Collision {
 public:
 	virtual ~Collision(){}
 	virtual void SetPos(Float2 pos){}
+	virtual Circle GetCircle()const = 0;
 	virtual bool IsOverlapping(const Collision* collision)const = 0;
 };
 
@@ -11,13 +17,13 @@ private:
 	Circle _circle;
 public:
 	CollisionCircle(Float2 pos,float size);
-	Circle GetCircle()const { return _circle; }
+	Circle GetCircle()const override{ return _circle; }
 	Vec2 GetPos()const { return _circle.center; }
 	float GetRadius()const { return _circle.r; }
 	void SetPos(Float2 pos) override{ _circle.setPos(pos); }
 	bool IsOverlapping(const Collision* collision)const override{
 		const CollisionCircle* ob1 = dynamic_cast<const CollisionCircle*>(collision);
-		return this->isOverlappingCircle(ob1);
+		if(ob1)return this->isOverlappingCircle(ob1);
 	}
 	bool isOverlappingCircle(const CollisionCircle* collision)const{
 		auto ob1 = this->GetCircle();

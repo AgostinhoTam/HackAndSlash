@@ -1,4 +1,9 @@
-﻿#include "stdafx.h"
+﻿/*===================================================================================
+敵行動（enemy.cpp)
+Date:2024/1/6
+制作者：譚偉進
+====================================================================================*/
+#include "stdafx.h"
 #include "enemy.h"
 #include "world.h"
 Enemy::Enemy() :Object("Enemy"), _texture(0xF089A_icon, 64)
@@ -31,4 +36,9 @@ bool Enemy::IsDiscard() const
 {
 	if (_hp < 0)return true;
 	return false;
+}
+
+void Enemy::Damage(Attack* attack)
+{
+	_hp -= attack->GetValue();
 }

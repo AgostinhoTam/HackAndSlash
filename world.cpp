@@ -1,4 +1,9 @@
-﻿#include "stdafx.h"
+﻿/*===================================================================================
+ゲームステージ（world.cpp)
+Date:2024/1/6
+制作者：譚偉進
+====================================================================================*/
+#include "stdafx.h"
 #include "world.h"
 
 World::~World()
@@ -32,8 +37,10 @@ void World::Update()
 		p->Update();
 	}
 	auto pPlayer = GetObjectByTag("Player");
-	if (GetOverlapObject(pPlayer->GetCollision())) {
-		
+	if (auto obj = GetOverlapObject(pPlayer->GetCollision())) {
+		if (obj->GetTag() == "Enemy") {
+			obj->Damage(pPlayer->GetAttack());
+		}
 	}
 }
 

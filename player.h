@@ -1,6 +1,12 @@
-﻿#pragma once
+﻿/*===================================================================================
+プレイヤー行動（player.h)
+Date:2024/1/6
+制作者：譚偉進
+====================================================================================*/
+#pragma once
 #include "object.h"
 #include "collision.h"
+#include "attack.h"
 class Player : public Object
 {
 	Texture _texture;
@@ -12,13 +18,11 @@ class Player : public Object
 public:
 	Player();
 	~Player();
-	void MoveUp();
-	void MoveDown();
-	void MoveLeft();
-	void MoveRight();
 	float PlayerAcceration(float goal, float cur);
 	void PlayerMove();
 	void Update()override;				//Updateの中にアタッククラス入れる
 	void Draw()const override;
 	bool IsDiscard()const override;
+	void AttackKeyPressed();
+	void CreateAttack();
 };
