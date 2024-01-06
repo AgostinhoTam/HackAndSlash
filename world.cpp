@@ -7,6 +7,7 @@ Date:2024/1/6
 #include "world.h"
 #include "attack.h"
 #include "enemy.h"
+
 World::~World()
 {
 	for (auto p : _objects) {
@@ -38,16 +39,6 @@ void World::Update()
 	for (auto p : _objects) {
 		p->Update();
 	}
-	auto attacker = GetObjectByTag("Attack");
-	if(attacker != nullptr){
-		if (auto obj = GetOverlapObject(attacker->GetCollision())) {
-			if (obj->GetTag() == "Enemy") {
-				Attack* pattacker = dynamic_cast<Attack*>(attacker);
-				Enemy* penemy = dynamic_cast<Enemy*>(obj);
-				if(penemy)obj->Damage(pattacker);
-			}
-		}
-	}
 }
 
 void World::Draw()
@@ -61,19 +52,33 @@ Object* World::GetObjectByTag(const std::string& tag)
 	for (auto object : _objects) {							//複数が返るように改造する
 		if (object->GetTag() == tag) { return object; }
 	}
-	//std::find(_objects.begin(), _objects.end(), tag);
 	return nullptr;
 }
-Object* World::GetOverlapObject(const Collision* collision)
+Object* World::GetOverlapEnemy(const Collision* collision)
 {
-	for (auto object : _objects) {
-		auto dist_collision = object->GetCollision();
-		if (object->GetTag() == "Player" || dist_collision == collision)continue;
-		if (dist_collision) {
-			if (dist_collision->IsOverlapping(collision)) {
-				return object;
-			}
-		}
+
+	auto it = _objects.begin();
+	while (it != _objects.end()) {
+		auto tag = std::find_if(it, _objects.end(), [](const Object* obj) {return obj->GetTag() == "Enemy"; });
+		if (tag == _objects.end())return nullptr;
+		Object* pEnemy = *tag;
+		if (pEnemy->GetCollision()->IsOverlapping(collision))return pEnemy;
+		++tag;
+		it = tag;
+	}
+
+	return nullptr;
+}
+Object* World::GetOverlapItem(const Collision* collision)
+{
+	auto it = _objects.begin();
+	while (it != _objects.end()) {
+		auto tag = std::find_if(it, _objects.end(), [](const Object* obj) {return obj->GetTag() == "Item"; });
+		if (tag == _objects.end())return nullptr;
+		Object* pItem = *tag;
+		if (pItem->GetCollision()->IsOverlapping(collision))return pItem;
+		++tag;
+		it = tag;
 	}
 	return nullptr;
 }

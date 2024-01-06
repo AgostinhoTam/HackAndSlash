@@ -18,5 +18,7 @@ public:
 	void Update();
 	void Pause() { _is_pause = true; }
 	void Resume() { _is_pause = false; }
+	void PlayerAttack();
+	void PickItem();
 	//void Menu();
 };

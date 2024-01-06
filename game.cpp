@@ -27,6 +27,7 @@ void Game::Update()
 	if (!_is_pause) {
 		_player->PlayerMove();
 		_world->Update();
+		PlayerAttack();
 	}
 	else {
 		Pause();
@@ -37,4 +38,33 @@ void Game::Update()
 	_world->Draw();
 	//Menu();
 	_world->CleanUp();
+}
+
+void Game::PlayerAttack()
+{
+	if (MouseL.up()) {
+		auto attacker = _world->GetObjectByTag("Attack");
+		if (attacker != nullptr) {
+			if (auto obj = _world->GetOverlapEnemy(attacker->GetCollision())) {
+					Attack* pattacker = dynamic_cast<Attack*>(attacker);
+					Enemy* penemy = dynamic_cast<Enemy*>(obj);
+					if (penemy)obj->Damage(pattacker);
+			}
+		}
+	}
+}
+
+void Game::PickItem()
+{
+	//if (MouseR.up()) {
+	//	if (_player != nullptr) {
+	//		if (auto obj = _world->GetOverlapItem(_player->GetCollision())) {
+	//			if (obj->GetTag() == "Enemy") {
+	//				Attack* pattacker = dynamic_cast<Attack*>(attacker);
+	//				Enemy* penemy = dynamic_cast<Enemy*>(obj);
+	//				if (penemy)obj->Damage(pattacker);
+	//			}
+	//		}
+	//	}
+	//}
 }

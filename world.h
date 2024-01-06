@@ -21,5 +21,6 @@ public:
 	void Draw();
 
 	Object* GetObjectByTag(const std::string& tag);
-	Object* GetOverlapObject(const Collision* collision);
+	Object* GetOverlapEnemy(const Collision* collision);
+	Object* GetOverlapItem(const Collision* collision);
 };

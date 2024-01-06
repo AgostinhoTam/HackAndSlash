@@ -6,6 +6,7 @@ Date:2024/1/6
 #include "stdafx.h"
 #include "enemy.h"
 #include "world.h"
+#include "item.h"
 Enemy::Enemy() :Object("Enemy"), _texture(0xF089A_icon, 64)
 {
 	_collision = new CollisionCircle(_position, ENEMY_SIZE);
@@ -34,7 +35,11 @@ void Enemy::Draw() const
 
 bool Enemy::IsDiscard() const
 {
-	if (_hp < 0)return true;
+	if (_hp < 0) {
+		auto item = new Item(GetPosition());
+		GetWorld()->Accept(item);
+		return true;
+	}
 	return false;
 }
 
