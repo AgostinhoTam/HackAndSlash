@@ -1,9 +1,26 @@
 ﻿#include "stdafx.h"
 #include "item.h"
 
-Item::Item(Float2 pos):Object("Item"), _texture(0xF1B14_icon, 64)
+Item::Item(Float2 pos, int itemtype):Object("Item")
 {
-	_collision = new CollisionCircle(pos, 32.0f);
+	SetPosition(pos);
+	switch (itemtype) {
+		case HPRECOVERY:{
+			_itemtype = HPRECOVERY;
+			const Texture recoveryText(0xF1B14_icon, 64);
+			_texture = recoveryText;
+			_weight = 1.0f;
+			break;
+		}
+		case MAXHPUP:{
+			_itemtype = MAXHPUP;
+			const Texture attackupText(0xF0737_icon, 64);
+			_texture = attackupText;
+			_weight = 2.0f;
+			break;
+		}
+	}
+	_collision = new CollisionCircle(GetPosition(), 32.0f);
 }
 
 void Item::Draw() const

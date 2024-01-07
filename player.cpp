@@ -5,7 +5,7 @@ Date:2024/1/6
 ====================================================================================*/
 #include "stdafx.h"
 #include "player.h"
-
+#include "inventory.h"
 Player::Player() :Object("Player"), _texture(0xF0A09_icon, 64)		//Playerタグ付けて、textureを入れる
 {
 	_collision = new CollisionCircle(_position, PLAYER_SIZE);
@@ -55,6 +55,7 @@ void Player::PlayerMove()
 	if (KeyD.up()) {
 		_velocityGoal.x = 0;
 	}
+
 }
 
 void Player::Update()
@@ -78,6 +79,64 @@ bool Player::IsDiscard() const
 {
 	if (_hp < 0)return true;
 	return false;
+}
+
+bool Player::InventoryAdd(Item* item)
+{
+	if (GetTotalWeight() + item->GetWeight() < INVENTORY_MAX_WEIGHT) {
+		_inventory.push_back(new Inventory(item));
+		return true;
+	}
+	return false;
+}
+
+int Player::CountItem(ITEM_TYPE itemtype)
+{
+	int count = 0;
+	auto it = _inventory.begin();
+	while(it != _inventory.end()){
+		auto tag = std::find_if(it, _inventory.end(), [itemtype](const Inventory* inventory) {return inventory->GetItemType() == itemtype; });
+		if (tag == _inventory.end())break;
+		++count;
+		++tag;
+		it = tag;
+	}
+	return count;
+}
+
+float Player::GetTotalWeight()
+{
+	_weight = 0.0;
+	for (auto p : _inventory) {
+		_weight += p->GetWeight();
+	}
+	return _weight;
+}
+
+void Player::HPRecovery(int hp)
+{
+	_hp = (_hp + hp > _maxhp) ? _maxhp : _hp + hp;
+	auto it = _inventory.begin();
+	while (it != _inventory.end()) {
+		it = std::find_if(it, _inventory.end(), [](const Inventory* inventory) {return inventory->GetItemType() == HPRECOVERY; });
+		if (it != _inventory.end()){
+			it = _inventory.erase(it);
+			return;
+		}
+	}
+}
+
+void Player::MaxHpUp()
+{
+	++_maxhp;
+	auto it = _inventory.begin();
+	while (it != _inventory.end()) {
+		it = std::find_if(it, _inventory.end(), [](const Inventory* inventory) {return inventory->GetItemType() == MAXHPUP; });
+		if (it != _inventory.end()) {
+			it = _inventory.erase(it);
+			return;
+		}
+	}
 }
 
 

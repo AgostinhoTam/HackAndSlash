@@ -36,7 +36,7 @@ void Enemy::Draw() const
 bool Enemy::IsDiscard() const
 {
 	if (_hp < 0) {
-		auto item = new Item(GetPosition());
+		auto item = new Item(GetPosition(), Random(0, (int)MAX_TYPE-1));
 		GetWorld()->Accept(item);
 		return true;
 	}

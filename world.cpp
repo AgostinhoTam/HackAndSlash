@@ -49,7 +49,7 @@ void World::Draw()
 }
 Object* World::GetObjectByTag(const std::string& tag)
 {
-	for (auto object : _objects) {							//複数が返るように改造する
+	for (auto object : _objects) {							
 		if (object->GetTag() == tag) { return object; }
 	}
 	return nullptr;
@@ -82,4 +82,3 @@ Object* World::GetOverlapItem(const Collision* collision)
 	}
 	return nullptr;
 }
-//ClearUpの中身は正直普通にdrawの後に入れていいらしい
