@@ -5,11 +5,7 @@ Date:2024/1/6
 ====================================================================================*/
 #pragma once
 #include "object.h"
-enum ITEM_TYPE {
-	HPRECOVERY=0,
-	MAXHPUP,
-	MAX_TYPE
-};
+
 class Item :public Object {
 private:
 	Texture _texture;
@@ -22,6 +18,6 @@ public:
 	void Draw()const override;
 	bool IsDiscard()const override;
 	void PickUpItem() { _flag = true; }
-	ITEM_TYPE GetItemType() { return _itemtype; }
+	ITEM_TYPE GetItemType()const override { return _itemtype; }
 	float GetWeight() { return _weight; }
 };

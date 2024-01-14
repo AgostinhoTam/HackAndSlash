@@ -120,7 +120,6 @@
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="enemyspawner.cpp" />
     <ClCompile Include="game.cpp" />
-    <ClCompile Include="inventory.cpp" />
     <ClCompile Include="item.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="player.cpp" />

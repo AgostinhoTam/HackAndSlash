@@ -8,10 +8,9 @@ class Collision {
 public:
 	virtual ~Collision(){}
 	virtual void SetPos(Float2 pos){}
-	virtual Circle GetCircle()const = 0;
+	virtual Circle GetCircle()const { return Circle(Float2(0.0f, 0.0f), 0.0f); }
 	virtual bool IsOverlapping(const Collision* collision)const = 0;
 };
-
 class CollisionCircle :public Collision {
 private:
 	Circle _circle;
@@ -22,13 +21,15 @@ public:
 	float GetRadius()const { return _circle.r; }
 	void SetPos(Float2 pos) override{ _circle.setPos(pos); }
 	bool IsOverlapping(const Collision* collision)const override{
-		const CollisionCircle* ob1 = dynamic_cast<const CollisionCircle*>(collision);
-		if(ob1)return this->isOverlappingCircle(ob1);
+		return this->isOverlappingCircle(collision);
 	}
-	bool isOverlappingCircle(const CollisionCircle* collision)const{
+	bool isOverlappingCircle(const Collision* collision)const{
 		auto ob1 = this->GetCircle();
 		auto ob2 = collision->GetCircle();
 		if (ob1.intersects(ob2))return true;
 		return false;
 	}
 };
+
+
+

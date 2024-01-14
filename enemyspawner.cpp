@@ -9,7 +9,7 @@ Date:2024/1/6
 #include "world.h"
 void EnemySpawner::Update()
 {
-	if (_frame_counter % (60*5)==0) {
+	if (_frame_counter % (60*3)==0) {
 		auto e = new Enemy;
 		e->SetPosition(GetPosition());
 		GetWorld()->Accept(e);

@@ -60,6 +60,7 @@ void Player::PlayerMove()
 
 void Player::Update()
 {
+	PlayerMove();
 	_velocity.x = PlayerAcceration(_velocityGoal.x, _velocity.x);
 	_velocity.y = PlayerAcceration(_velocityGoal.y, _velocity.y);
 	_position += _velocity;
@@ -68,6 +69,8 @@ void Player::Update()
 		auto attacker = new Attack(GetPosition()+_direction*32);
 		GetWorld()->Accept(attacker);
 	}
+	PlayerAttack();
+	PickItem();
 }
 
 void Player::Draw() const
@@ -83,8 +86,8 @@ bool Player::IsDiscard() const
 
 bool Player::InventoryAdd(Item* item)
 {
-	if (GetTotalWeight() + item->GetWeight() < INVENTORY_MAX_WEIGHT) {
-		_inventory.push_back(new Inventory(item));
+	if (GetTotalWeight() + item->GetWeight() <= INVENTORY_MAX_WEIGHT) {
+		_inventory.AddItem(*item);
 		return true;
 	}
 	return false;
@@ -92,51 +95,60 @@ bool Player::InventoryAdd(Item* item)
 
 int Player::CountItem(ITEM_TYPE itemtype)
 {
-	int count = 0;
-	auto it = _inventory.begin();
-	while(it != _inventory.end()){
-		auto tag = std::find_if(it, _inventory.end(), [itemtype](const Inventory* inventory) {return inventory->GetItemType() == itemtype; });
-		if (tag == _inventory.end())break;
-		++count;
-		++tag;
-		it = tag;
-	}
-	return count;
+	int no = _inventory.CountItem(itemtype);
+	return no;
+	
 }
 
 float Player::GetTotalWeight()
 {
-	_weight = 0.0;
-	for (auto p : _inventory) {
-		_weight += p->GetWeight();
-	}
-	return _weight;
+	return _inventory.GetTotalWeight();
 }
 
 void Player::HPRecovery(int hp)
 {
 	_hp = (_hp + hp > _maxhp) ? _maxhp : _hp + hp;
-	auto it = _inventory.begin();
-	while (it != _inventory.end()) {
-		it = std::find_if(it, _inventory.end(), [](const Inventory* inventory) {return inventory->GetItemType() == HPRECOVERY; });
-		if (it != _inventory.end()){
-			it = _inventory.erase(it);
-			return;
-		}
-	}
+	_inventory.UseItem(HPRECOVERY);
+	
 }
 
 void Player::MaxHpUp()
 {
 	++_maxhp;
-	auto it = _inventory.begin();
-	while (it != _inventory.end()) {
-		it = std::find_if(it, _inventory.end(), [](const Inventory* inventory) {return inventory->GetItemType() == MAXHPUP; });
-		if (it != _inventory.end()) {
-			it = _inventory.erase(it);
-			return;
+	_inventory.UseItem(MAXHPUP);
+}
+
+void Player::DropInventory(ITEM_TYPE id)
+{
+	_inventory.UseItem(id);
+	auto a = new Item(GetPosition(), id);
+	GetWorld()->Accept(a);
+}
+
+void Player::PlayerAttack()
+{
+		if (MouseL.up()) {
+			auto attacker = GetWorld()->GetObjectByTag("Attack");
+			if (attacker != nullptr) {
+				if (auto obj = GetWorld()->GetOverlapEnemy(attacker->GetCollision())) {
+
+					auto pattacker = GetWorld()->GetObjectByTag("Attack");
+					auto penemy = GetWorld()->GetObjectByTag("Enemy");
+					if (penemy)obj->Damage(pattacker->GetAttack());
+				}
+			}
 		}
-	}
+}
+
+void Player::PickItem()
+{
+
+		if (MouseR.up()) {
+				if (auto obj = GetWorld()->GetOverlapItem(this->GetCollision())) {
+					Item* pItem = dynamic_cast<Item*>(obj);
+					if (this->InventoryAdd(pItem))pItem->PickUpItem();
+				}
+		}
 }
 
 

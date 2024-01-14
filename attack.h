@@ -16,5 +16,6 @@ public:
 	void Draw()const override;
 	bool IsDiscard()const override { return true; }
 	void AttackCreation(World* world);
+	Attack* GetAttack() { return this; }
 };
 

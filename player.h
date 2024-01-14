@@ -13,7 +13,7 @@ class Player : public Object
 {
 	Texture _texture;
 	Vec2 _velocityGoal = { 0.0f,0.0f };
-	std::list<Inventory*> _inventory;
+	Inventory _inventory;
 	int _hp = 10;
 	int _maxhp = 10;
 	const float PLAYER_MAX_MOVESPEED = 5.0f;
@@ -34,4 +34,9 @@ public:
 	float GetTotalWeight();
 	void HPRecovery(int hp);
 	void MaxHpUp();
+	void DropInventory(ITEM_TYPE id);
+	void PlayerAttack();
+	void PickItem();
+	int GetHP()const { return _hp; }
+	int GetMaxHp()const { return _maxhp; }
 };

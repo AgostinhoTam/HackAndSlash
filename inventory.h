@@ -7,13 +7,43 @@ Date:2024/1/6
 #include "item.h"
 class Inventory {
 private:
-	bool _flag=true;
-	ITEM_TYPE _itemtype;
-	float _weight;
+	std::list<Item> _items;
 public:
-	Inventory(Item* item);
-	void UseItem() { _flag = false; }
-	ITEM_TYPE GetItemType() const{ return _itemtype; }
-	float GetWeight() const{ return _weight; }
-	bool GetUse() const{ return _flag; }
+	~Inventory() {
+
+	} 
+	void AddItem(Item item) { _items.push_back(item); }
+	const int CountItem(ITEM_TYPE type){
+		int count = 0;
+		auto it = _items.begin();
+		while (it != _items.end()) {
+			it = std::find_if(it, _items.end(), [type](const Item item) {return item.GetItemType() == type; });
+			if (it != _items.end()) {
+				++count;
+				++it;
+			}
+			else {
+				break;
+			}
+		}
+		return count;
+	}
+	float GetTotalWeight() {
+		float total = 0.0;
+		for (auto p : _items) {
+			total += p.GetWeight();
+		}
+		return total;
+	}
+	void UseItem(ITEM_TYPE type) {
+		for (auto it = _items.begin(); it != _items.end();) {
+			if ((*it).GetItemType() == type) {
+				it = _items.erase(it);
+				return;
+			}
+			else {
+				++it;
+			}
+		}
+	}
 };
