@@ -60,12 +60,10 @@ Object* World::GetOverlapEnemy(const Collision* collision)
 
 	auto it = _objects.begin();
 	while (it != _objects.end()) {
-		auto tag = std::find_if(it, _objects.end(), [](const Object* obj) {return obj->GetTag() == "Enemy"; });
-		if (tag == _objects.end())return nullptr;
-		Object* pEnemy = *tag;
-		if (pEnemy->GetCollision()->IsOverlapping(collision))return pEnemy;
-		++tag;
-		it = tag;
+		it = std::find_if(it, _objects.end(), [](const Object* obj) {return obj->GetTag() == "Enemy"; });
+		if (it == _objects.end())return nullptr;
+		if ((*it)->GetCollision()->IsOverlapping(collision))return *it;
+		++it;
 	}
 
 	return nullptr;

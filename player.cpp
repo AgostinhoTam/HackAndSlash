@@ -27,6 +27,7 @@ float Player::PlayerAcceration(float goal, float cur)
 
 void Player::PlayerMove()
 {
+	//移動押すと最大速度代入、向きも変わる
 	if (KeyW.pressed()) {
 		_velocityGoal.y = -PLAYER_MAX_MOVESPEED;
 		_direction = { 0.0f,-1.0f };
@@ -86,6 +87,7 @@ bool Player::IsDiscard() const
 
 bool Player::InventoryAdd(Item* item)
 {
+	//最大重量超えないように
 	if (GetTotalWeight() + item->GetWeight() <= INVENTORY_MAX_WEIGHT) {
 		_inventory.AddItem(*item);
 		return true;
@@ -95,21 +97,25 @@ bool Player::InventoryAdd(Item* item)
 
 int Player::CountItem(ITEM_TYPE itemtype)
 {
-	int no = _inventory.CountItem(itemtype);
-	return no;
+	//アイテムを数える
+	int count = _inventory.CountItem(itemtype);
+	return count;
 	
 }
 
 float Player::GetTotalWeight()
 {
+	//アイテムの重量を計算
 	return _inventory.GetTotalWeight();
 }
 
 void Player::HPRecovery(int hp)
 {
+	//HPが最大だったら使えない、最大ＨＰも越えられないように
+	if(_hp != _maxhp){
 	_hp = (_hp + hp > _maxhp) ? _maxhp : _hp + hp;
 	_inventory.UseItem(HPRECOVERY);
-	
+	}
 }
 
 void Player::MaxHpUp()
@@ -120,13 +126,17 @@ void Player::MaxHpUp()
 
 void Player::DropInventory(ITEM_TYPE id)
 {
+	//指定されたアイテムをInventoryから消す処理
 	_inventory.UseItem(id);
+
+	//ゲームオブジェクト化
 	auto a = new Item(GetPosition(), id);
 	GetWorld()->Accept(a);
 }
 
 void Player::PlayerAttack()
 {
+	//攻撃の処理
 		if (MouseL.up()) {
 			auto attacker = GetWorld()->GetObjectByTag("Attack");
 			if (attacker != nullptr) {
@@ -142,7 +152,7 @@ void Player::PlayerAttack()
 
 void Player::PickItem()
 {
-
+	//アイテム拾う処理
 		if (MouseR.up()) {
 				if (auto obj = GetWorld()->GetOverlapItem(this->GetCollision())) {
 					Item* pItem = dynamic_cast<Item*>(obj);
